@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    env_file:
+      - .env 
+    ports:
+      - "${EXPOSE_PORT}:8000"  
+      - "${EXPOSE_PORT_WS}:8010" 
+    restart: always
+    container_name: "sistema_chat"
+    volumes:
+      - .:/app 
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+      - redis-service
+    networks:
+      - app-network
+
+  redis-service:
+    image: redis:6.2.12
+    restart: always
+    container_name: "chat_redis"
+    command: redis-server --appendonly yes
+    volumes:
+      - ./data-redis:/data 
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    restart: always
+    container_name: "chat_postgres"
+    volumes:
+      - ./data-postgres:/var/lib/postgresql/data 
+    env_file:
+      - .env 
+    ports:
+      - "${EXPOSE_DATABASE_PORT}:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data-postgres:
+  data-redis:

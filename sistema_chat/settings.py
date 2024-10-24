@@ -38,6 +38,7 @@ if DEBUG:
     ALLOWED_HOSTS += [
         "localhost",
         "127.0.0.1",
+        "0.0.0.0",
     ]
 
 # Application definition
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "channels",
     "chat",
     "autenticacao",
 ]
@@ -92,12 +94,12 @@ LANGUAGES = (("pt-br", "Português brasileiro"),)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env.get("DATABASE_NAME", "sistema-chat"),
-        "USER": env.get("DATABASE_USER", "sistema-chat"),
-        "PASSWORD": env.get("DATABASE_PASSWORD", "postgres123"),
-        "HOST": env.get("DATABASE_HOST", "localhost"),
-        "PORT": env.get("DATABASE_PORT", "5432"),
-    },
+        "NAME": env.get("POSTGRES_DB"),
+        "USER": env.get("POSTGRES_USER"),
+        "PASSWORD": env.get("POSTGRES_PASSWORD"),
+        "HOST": env.get("POSTGRES_HOST", "localhost"),
+        "PORT": env.get("POSTGRES_PORT", "5432"),
+    }
 }
 
 
@@ -154,7 +156,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": ["redis://redis-service/2"],
         },
     },
 }
@@ -163,6 +165,8 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

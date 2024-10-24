@@ -117,3 +117,7 @@ uwsgi/*
 !uwsgi/uwsgi.ini
 !uwsgi/uwsgi.dev.ini
 static/
+
+
+data-postgres
+data-redis
