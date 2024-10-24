@@ -132,6 +132,7 @@ USE_I18N = True
 USE_TZ = True
 
 
+# Configurações autenticação
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -144,6 +145,18 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer", "JWT"),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
+}
+
+# Configurações Websocket
+ASGI_APPLICATION = "sistema_chat.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }
 
 # Static files (CSS, JavaScript, Images)
